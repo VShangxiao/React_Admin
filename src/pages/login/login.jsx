@@ -13,12 +13,20 @@ class Login extends Component {
     handleSubmit = (event) => {
     // 阻止事件的默认行为
         event.preventDefault()
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log('提交登录的ajax请求-用户名: ', values.username);
+                console.log('提交登录的ajax请求-密码: ', values.password);
+            } else {
+                console.log('校验失败!')
+            }
+        });
     // 得到 form 对象
-        const form = this.props.form
+    //     const form = this.props.form
     // 获取表单项的输入数据
-        const values = form.getFieldsValue()
-        console.log('handleSubmit() 的值', values)
-    }
+    //     const values = form.getFieldsValue()
+    //     console.log('handleSubmit() 的值', values)
+    };
 
     /*
     * 对密码进行自定义验证
