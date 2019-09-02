@@ -1,18 +1,24 @@
 import React, {Component} from 'react'
-import { message, Button } from 'antd'
+import { BrowserRouter, Switch, Route} from 'react-router-dom'
+
+import Login from "./pages/login/login"
+import Admin from "./pages/admin/admin"
+
 
 /*
 * 应用的根组件
 * */
 
 export default class App extends Component {
-
-    handClick = () => {
-        message.error('服务器开小差啦')
-    }
-
     render() {
-        return <Button type="primary" onClick={this.handClick}>Primary</Button>
+        return (
+            <BrowserRouter>
+                <Switch>
+                    <Route path='/login' component={Login} />
+                    <Route path='/admin' component={Admin} />
+                </Switch>
+            </BrowserRouter>
+        )
     }
 }
 
