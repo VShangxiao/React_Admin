@@ -20,6 +20,31 @@ class Login extends Component {
         console.log('handleSubmit() 的值', values)
     }
 
+    /*
+    * 对密码进行自定义验证
+    * */
+
+    /*
+    用户名/密码的的合法性要求
+    1). 必须输入
+    2). 必须大于等于4 位
+    3). 必须小于等于12 位
+    4). 必须是英文、数字或下划线组成
+    */
+    validatePwd = (rule, value, callback) => {
+        console.log('validatePwd() ', rule, value)
+        if (!value) {
+            callback('必须输入密码')
+        } else if (value.length < 4) {
+            callback('密码长度不少于4位')
+        } else if (value.length > 12) {
+            callback('密码长度不能大于12位')
+        }  else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+            callback('密码必须由英文、数字或下划线组成')
+        } else {
+            callback()  // 验证通过
+        }
+    }
 
     render() {
 
@@ -55,7 +80,13 @@ class Login extends Component {
                         </Form.Item>
                         <Form.Item>
                         {
-                            getFieldDecorator('password', {})(
+                            getFieldDecorator('password', {
+                                rules: [
+                                    {
+                                        validator: this.validatePwd
+                                    }
+                                ]
+                            })(
                             <Input
                                 prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                 type="password"
