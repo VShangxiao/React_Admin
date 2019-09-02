@@ -15,8 +15,7 @@ class Login extends Component {
         event.preventDefault()
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('提交登录的ajax请求-用户名: ', values.username);
-                console.log('提交登录的ajax请求-密码: ', values.password);
+                console.log('提交登录的ajax请求: ', values.username);
             } else {
                 console.log('校验失败!')
             }
