@@ -20,3 +20,18 @@ export default function ajax(url, data={}, type='GET') {
         return axios.post(url, data)
     }
 }
+
+// 以下为逻辑演示，实际开发使用更高效的模块
+
+// 请求登录接口
+// ajax('/login', {
+//     username: 'Rust',
+//     password: 'admin',
+// }, 'POST').then();
+
+// 添加用户
+// ajax('/manage/user/add', {
+//     username: 'Rust',
+//     password: 'admin',
+//     'email': 'cooksima@job.com',
+// }, 'POST').then();
