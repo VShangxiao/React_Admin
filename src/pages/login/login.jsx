@@ -18,13 +18,8 @@ class Login extends Component {
             if (!err) {
                 // 请求登录
                 const { username, password } = values
-                try {
-                    const response = await reqLogin(username, password)
-                        console.log('请求成功！', response.data)
-                } catch (error) {
-                    console.log('请求出错！', error)
-                }
-
+                const response = await reqLogin(username, password)
+                console.log('请求成功！', response.data)
             } else {
                 console.log('校验失败!')
             }
