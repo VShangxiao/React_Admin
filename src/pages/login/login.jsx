@@ -14,17 +14,17 @@ class Login extends Component {
     handleSubmit = (event) => {
     // 阻止事件的默认行为
         event.preventDefault()
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             if (!err) {
                 // 请求登录
                 const { username, password } = values
-                reqLogin(username, password).then(response => {
-                    const user = response.data
-                    console.log('成功 用户名为：', user['data']['username'])
-                    console.log('成功 密码为：', user['data']['password'])
-                }).catch(error => {
-                    console.log('失败了', error)
-                })
+                try {
+                    const response = await reqLogin(username, password)
+                        console.log('请求成功！', response.data)
+                } catch (error) {
+                    console.log('请求出错！', error)
+                }
+
             } else {
                 console.log('校验失败!')
             }
