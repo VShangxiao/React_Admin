@@ -7,6 +7,7 @@ import { Form, Icon, Input, Button } from 'antd';
 
 import './login.less'
 import logo from './images/logo.png'
+import { reqLogin } from '../../api'
 
 class Login extends Component {
 
@@ -15,7 +16,15 @@ class Login extends Component {
         event.preventDefault()
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('提交登录的ajax请求: ', values.username);
+                // 请求登录
+                const { username, password } = values
+                reqLogin(username, password).then(response => {
+                    const user = response.data
+                    console.log('成功 用户名为：', user['data']['username'])
+                    console.log('成功 密码为：', user['data']['password'])
+                }).catch(error => {
+                    console.log('失败了', error)
+                })
             } else {
                 console.log('校验失败!')
             }

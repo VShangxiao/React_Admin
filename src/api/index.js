@@ -4,11 +4,13 @@
 * */
 import ajax from "./ajax";
 
+const BASE = ''
+
 // 登录接口
-export const reqLogin = (username, password) => ajax('/login', {
+export const reqLogin = (username, password) => ajax(BASE + '/login', {
     username,
     password,
 }, 'POST')
 
 // 添加用户接口
-export const reqAddUser = (user) => ajax('/manage/user/add', user, 'POST')
+export const reqAddUser = (user) => ajax(BASE + '/manage/user/add', user, 'POST')
