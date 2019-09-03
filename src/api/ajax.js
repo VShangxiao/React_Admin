@@ -6,7 +6,8 @@
 * 1. 优化: 统一处理请求异常 ->
 *       方案是在外层包一个 promise 对象
 *       在青丘出错的时候，不 reject(error), 而是显示错误提示
-*
+* 2. 优化2: 异步得到不是 response，而是 response.data
+*       在青丘成功 resolve 时: resolve(response.data)
 * */
 
 import axios from 'axios'

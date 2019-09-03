@@ -3,7 +3,13 @@
 * */
 
 import React, { Component } from "react"
-import { Form, Icon, Input, Button } from 'antd';
+import {
+    Form,
+    Icon,
+    Input,
+    Button,
+    message,
+} from 'antd';
 
 import './login.less'
 import logo from './images/logo.png'
@@ -19,7 +25,17 @@ class Login extends Component {
                 // 请求登录
                 const { username, password } = values
                 const response = await reqLogin(username, password)
-                console.log('请求成功！', response.data)
+                // console.log('请求成功！', response.data)
+                const result = response.data;
+                if (result.status === 0) {
+                    // 登陆成功
+                    message.success('登录成功!')
+                    // 跳转到管理界面 (不需要再回退到登录界面，所以用 replace)
+                    this.props.history.replace('/')
+                } else {
+                    // 登录失败
+                    message.error('错误：', result.msg)
+                }
             } else {
                 console.log('校验失败!')
             }
