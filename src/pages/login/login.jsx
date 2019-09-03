@@ -14,6 +14,7 @@ import {
 import './login.less'
 import logo from './images/logo.png'
 import { reqLogin } from '../../api'
+import memoryUtils from "../../utils/memoryUtils";
 
 class Login extends Component {
 
@@ -30,6 +31,12 @@ class Login extends Component {
                 if (result.status === 0) {
                     // 登陆成功
                     message.success('登录成功!')
+
+                    // 保存 user
+                    const user = result.data
+                    // 保存在内存中
+                    memoryUtils.user = user
+
                     // 跳转到管理界面 (不需要再回退到登录界面，所以用 replace)
                     this.props.history.replace('/')
                 } else {
