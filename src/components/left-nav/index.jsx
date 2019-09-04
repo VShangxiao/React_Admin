@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import {
+    Link,
+    withRouter,
+} from 'react-router-dom'
 import { Menu, Icon, Button } from 'antd';
 
 import logo from '../../assets/images/logo.png'
@@ -12,7 +15,7 @@ const { SubMenu } = Menu;
     左侧导航的组件
 */
 
-export default class LeftNav extends Component {
+class LeftNav extends Component {
 
     /*
         根据 menu 的数据数组生成对应的标签数组
@@ -116,6 +119,10 @@ export default class LeftNav extends Component {
     }
 
     render() {
+
+        // 得到当前请求的路由路径
+        const path = this.props.location.pathname
+
         return (
             <div className="left-nav">
                 <Link to='/' className="left-nav-header">
@@ -126,58 +133,24 @@ export default class LeftNav extends Component {
                 <Menu
                     mode="inline"
                     theme="dark"
+                    selectedKeys={[path]}
                 >
-                    {/* 
-                <Menu.Item key="/home">
-                    <Link to='/home'>
-                        <Icon type="pie-chart" />
-                        <span>首 页</span>
-                    </Link>
-                </Menu.Item>
-                <SubMenu
-                    key="sub1"
-                    title={
-                        <span>
-                            <Icon type="shop" />
-                            <span>商 品</span>
-                        </span>
-                    }
-                >
-                    <Menu.Item key="/category">
-                        <Link to='/category'>
-                            <Icon type="shop" />
-                            <span>品类管理</span>
-                        </Link>
-                    </Menu.Item>
 
-                    <Menu.Item key="/product">
-                        <Link to='/product'>
-                            <Icon type="shop" />
-                            <span>商品管理</span>
-                        </Link>
-                    </Menu.Item>
 
-                    <Menu.Item key="/user">
-                        <Link to='/user'>
-                            <Icon type="user" />
-                            <span>用户管理</span>
-                        </Link>
-                    </Menu.Item>
-
-                    <Menu.Item key="/role">
-                        <Link to='/role'>
-                            <Icon type="idcard" />
-                            <span>角色管理</span>
-                        </Link>
-                    </Menu.Item>
-                </SubMenu> */}
-
-                    {
-                        this.getMenuNodes_map(menuList)
-                    }
+                {
+                    this.getMenuNodes_map(menuList)
+                }
                 </Menu>
             </div>
         )
     }
 }
+
+/*
+*   withRouter 高阶组件:
+     包装非路由组件，返回一个新的组件
+     新的组件向非路由组件传递 3 个属性:
+     history  location  match
+* */
+export default withRouter(LeftNav)
 
