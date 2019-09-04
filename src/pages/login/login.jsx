@@ -15,6 +15,9 @@ import './login.less'
 import logo from './images/logo.png'
 import { reqLogin } from '../../api'
 import memoryUtils from "../../utils/memoryUtils";
+import storageUtils from "../../utils/storageUtils";
+
+const Item = Form.Item // 不能写在import之前
 
 class Login extends Component {
 
@@ -32,10 +35,12 @@ class Login extends Component {
                     // 登陆成功
                     message.success('登录成功!')
 
-                    // 保存 user
+                    // 保存用户数据 user
                     const user = result.data
                     // 保存在内存中
                     memoryUtils.user = user
+                    // 保存到 local 中
+                    storageUtils.saveUser(user)
 
                     // 跳转到管理界面 (不需要再回退到登录界面，所以用 replace)
                     this.props.history.replace('/')
@@ -94,7 +99,7 @@ class Login extends Component {
                 <section className="login-content">
                     <h2>用户登录</h2>
                     <Form onSubmit={this.handleSubmit} className="login-form">
-                        <Form.Item>
+                        <Item>
                         {
                             getFieldDecorator('username', {
                             //  配置对象: 属性名是特定的一些名称
@@ -111,7 +116,7 @@ class Login extends Component {
                                 placeholder="输入用户名"
                             />,
                         )}
-                        </Form.Item>
+                        </Item>
                         <Form.Item>
                         {
                             getFieldDecorator('password', {
