@@ -16,9 +16,9 @@ export default class LeftNav extends Component {
 
     /*
         根据 menu 的数据数组生成对应的标签数组
-        使用 map 加 递归调用
+        使用 map + 递归调用
      */
-    getMenuNodes = (menuList) => {
+    getMenuNodes_map = (menuList) => {
         return menuList.map(item => {
             /* 
                 {
@@ -76,6 +76,43 @@ export default class LeftNav extends Component {
             }
 
         })
+    }
+
+    /*
+        根据 menu 的数据数组生成对应的标签数组
+        使用 mreduce() + 递归调用
+    */
+    getMenuNodes = (menuList) => {
+        return menuList.reduce((pre, item) => {
+            // 向 pre 添加 <Menu.Item>
+            if (!item.children) {
+                pre.push((
+                    <Menu.Item key={item.key}>
+                        <Link to={item.key}>
+                            <Icon type={item.icon} />
+                            <span>{item.title}</span>
+                        </Link>
+                    </Menu.Item>
+                ))
+            } else {
+                // 向 pre 添加 <SubMenu>
+                pre.push((
+                    <SubMenu
+                        key={item.key}
+                        title={
+                            <span>
+                                <Icon type={item.icon} />
+                                <span>{item.title}</span>
+                            </span>
+                        }
+                    >
+                        {this.getMenuNodes(item.children)}
+                    </SubMenu >
+                ))
+            }
+
+            return pre
+        }, [])
     }
 
     render() {
@@ -136,7 +173,7 @@ export default class LeftNav extends Component {
                 </SubMenu> */}
 
                     {
-                        this.getMenuNodes(menuList)
+                        this.getMenuNodes_map(menuList)
                     }
                 </Menu>
             </div>
