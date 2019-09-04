@@ -86,6 +86,10 @@ class LeftNav extends Component {
         使用 mreduce() + 递归调用
     */
     getMenuNodes = (menuList) => {
+
+        // 得到当前请求的路由路径
+        const path = this.props.location.pathname
+
         return menuList.reduce((pre, item) => {
             // 向 pre 添加 <Menu.Item>
             if (!item.children) {
@@ -98,6 +102,14 @@ class LeftNav extends Component {
                     </Menu.Item>
                 ))
             } else {
+
+                // 查找一个与当前请求路径相匹配的子Item
+                const cItem = item.children.find(cItem => cItem.key === path)
+                // 如果存在, 说明当前item的子列表需要打开
+                if (cItem) {
+                    this.openKey = item.key
+                }
+
                 // 向 pre 添加 <SubMenu>
                 pre.push((
                     <SubMenu
@@ -118,10 +130,21 @@ class LeftNav extends Component {
         }, [])
     }
 
+    /*
+    * 在第一次 render() 之前执行一次
+    *    为第一次 render() 准备数据(必须同步的)
+    * */
+    componentWillMount() {
+        this.menuNodes = this.getMenuNodes(menuList)
+    }
+
     render() {
 
+        const menuNodes = this.getMenuNodes(menuList)
         // 得到当前请求的路由路径
         const path = this.props.location.pathname
+        // 得到需要打开菜单项的 key
+        const openKey = this.openKey
 
         return (
             <div className="left-nav">
@@ -134,11 +157,10 @@ class LeftNav extends Component {
                     mode="inline"
                     theme="dark"
                     selectedKeys={[path]}
+                    defaultOpenKeys={[openKey]}
                 >
-
-
                 {
-                    this.getMenuNodes_map(menuList)
+                    this.menuNodes
                 }
                 </Menu>
             </div>
