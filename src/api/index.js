@@ -23,15 +23,17 @@ export const reqAddUser = (user) => ajax(BASE + '/manage/user/add', user, 'POST'
 * */
 
 export const reqWeather = (city) => {
-    return new Promise((resolove, reject) => {
+    return new Promise((resolve, reject) => {
         const url = `http://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`
         jsonp(url, {}, (err, data) => {
-            console.log('jsonp() ', err, data)
-            // 请求成功
+            console.log('接口获取的数据类型: ', typeof(data))
+            console.log('接口获取的数据: ', data)
+            console.log('接口获取的大连天气: ', data.results[0]['weather_data'][0]['weather'])
+            // 如果请求成功
             if (!err && data.status === 'success') {
                 // 取出需要的数据
-                const { dayPictureUrl, waether } data.results[0].weather_data[0]
-                resolove({ dayPictureUrl, waether })
+                const { dayPictureUrl, weather } = data.results[0].weather_data[0]
+                resolve({dayPictureUrl, weather})  
             } else {
                 // 请求失败
                message.error('获取天气信息失败')
@@ -40,4 +42,6 @@ export const reqWeather = (city) => {
     })
 }
 
+
 // reqWeather('大连')
+
