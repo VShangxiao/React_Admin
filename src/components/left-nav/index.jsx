@@ -3,7 +3,7 @@ import {
     Link,
     withRouter,
 } from 'react-router-dom'
-import { Menu, Icon, Button } from 'antd';
+import { Menu, Icon } from 'antd';
 
 import logo from '../../assets/images/logo.png'
 import menuList from "../../config/menuConfig";
