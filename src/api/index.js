@@ -2,7 +2,10 @@
 * 包含应用中所有接口请求函数的模块
 * 每个函数的返回值都是 promise
 * */
+
+import jsonp from 'jsonp'
 import ajax from "./ajax";
+import {message} from "antd";
 
 const BASE = ''
 
@@ -14,3 +17,27 @@ export const reqLogin = (username, password) => ajax(BASE + '/login', {
 
 // 添加用户接口
 export const reqAddUser = (user) => ajax(BASE + '/manage/user/add', user, 'POST')
+
+/*
+*  jsonp 请求的接口请求函数
+* */
+
+export const reqWeather = (city) => {
+    return new Promise((resolove, reject) => {
+        const url = `http://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`
+        jsonp(url, {}, (err, data) => {
+            console.log('jsonp() ', err, data)
+            // 请求成功
+            if (!err && data.status === 'success') {
+                // 取出需要的数据
+                const { dayPictureUrl, waether } data.results[0].weather_data[0]
+                resolove({ dayPictureUrl, waether })
+            } else {
+                // 请求失败
+               message.error('获取天气信息失败')
+            }
+        })
+    })
+}
+
+// reqWeather('大连')
