@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
 
+import { reqWeather } from "../../api"
+import menuList from '../../config/menuConfig'
 import { formateDate } from '../../utils/dateUtils'
-import { reqWeather } from "../../api";
-import memoryUtils from "../../utils/memoryUtils";
+import memoryUtils from "../../utils/memoryUtils"
 import './index.less'
 
 /* 
     头部导航的组件
 */
 
-export default class Header extends Component {
+class Header extends Component {
 
     state = {
         currentTime: formateDate(Date.now()),
@@ -26,21 +28,6 @@ export default class Header extends Component {
         }, 1000)
     }
 
-    // 获取当前天气
-    getWeather = async () => {
-        // 调用接口请求异步数据
-        const weatherData = await reqWeather('大连')
-        const dayPictureUrl = weatherData['dayPictureUrl']
-        const weather = weatherData['weather']
-        // 更新状态
-        // if (!weather) {
-        //     alert('天气未获得')
-        // } else {
-        //     this.setState({ dayPictureUrl, weather })
-        // }
-
-        this.setState({ dayPictureUrl, weather })
-    }
 
     // 获取当前天气
     getWeather = async () => {
@@ -48,11 +35,28 @@ export default class Header extends Component {
         const { dayPictureUrl, weather } = await reqWeather('大连')
         console.log('大连天气: ', weather)
         // 更新状态
-        if (!weather) {
-            alert('天气未获得')
-        } else {
-            this.setState({ dayPictureUrl, weather })
-        }
+        this.setState({ dayPictureUrl, weather })
+    }
+
+    // 更新状态
+    getTitle = () => {
+        // 得到当前请求路径
+        const path = this.props.location.pathname
+        let title
+        menuList.forEach(item => {
+            if (item.key === path) {
+                // 如果当前 item 对象的 key 与 path 一样，item 的 title 就是需要显示的 title
+                title = item.title
+            } else if (item.children) {
+                // 在所有的 子item 中查找匹配的
+                const cItem = item.children.find(cItem => cItem.key === path)
+                // 如果有值说明匹配
+                if (cItem) {
+                    title = cItem.title
+                }
+            }
+        })
+        return title
     }
 
 
@@ -73,6 +77,9 @@ export default class Header extends Component {
 
         const username = memoryUtils.user.username
 
+        // 得到当前需要显示的 title 
+        const title = this.getTitle()
+        
         return (
             <div className="header">
                 <div className="header-top">
@@ -81,9 +88,7 @@ export default class Header extends Component {
                 </div>
 
                 <div className="header-bottom">
-                    <div className="header-bottom-left">
-                        首页
-                    </div>
+                    <div className="header-bottom-left">{title}</div>
                     <div className="header-bottom-right">
                         <span>{currentTime}</span>
                         <img src={dayPictureUrl} alt="weather" />
@@ -94,4 +99,6 @@ export default class Header extends Component {
         )
     }
 }
+
+export default withRouter(Header)
 
