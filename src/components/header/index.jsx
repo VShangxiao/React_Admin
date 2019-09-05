@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
+import { Modal } from 'antd'
 
-import { reqWeather } from "../../api"
+import { reqWeather } from '../../api'
 import menuList from '../../config/menuConfig'
 import { formateDate } from '../../utils/dateUtils'
 import memoryUtils from "../../utils/memoryUtils"
+import storageUtils from '../../utils/storageUtils.js'
 import './index.less'
 
 /* 
@@ -22,7 +24,7 @@ class Header extends Component {
     // 获取当前时间
     getTime = () => {
         // 每隔一秒获取一次当前时间, 并更新 currentTime 
-        setInterval(() => {
+        this.intervalId = setInterval(() => {
             const currentTime = formateDate(Date.now())
             this.setState({ currentTime })
         }, 1000)
@@ -59,6 +61,25 @@ class Header extends Component {
         return title
     }
 
+    /* 
+        退出登录
+    */
+   logout = () => {
+       // 显示确认框
+       Modal.confirm(({
+        title: '确定退出当前标注系统吗?',
+        content: '确认退出',
+        onOk: () => {
+          console.log('已退出', this);
+          // 删除保存的 user 数据 
+          storageUtils.removeUser()
+          memoryUtils.user = {}
+
+          // 跳转到登录页面
+          this.props.history.replace('/login')
+        }
+      }))
+   }
 
     /* 
         第一次 render() 之后执行一次
@@ -71,6 +92,14 @@ class Header extends Component {
         this.getWeather()
     }
 
+    /* 
+        当前组件卸载之前调用
+    */
+    componentWillUnmount() {
+        // 清除定时器
+        clearInterval(this.intervalId)
+    }
+
     render() {
 
         const { currentTime, dayPictureUrl, weather } = this.state
@@ -79,12 +108,12 @@ class Header extends Component {
 
         // 得到当前需要显示的 title 
         const title = this.getTitle()
-        
+
         return (
             <div className="header">
                 <div className="header-top">
                     <span>欢迎, {username}</span>
-                    <a href="javascript:">退出</a>
+                    <a href="javascript:" onClick={this.logout}>退出</a>
                 </div>
 
                 <div className="header-bottom">
