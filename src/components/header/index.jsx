@@ -36,7 +36,6 @@ class Header extends Component {
     getWeather = async () => {
         // 调用接口请求异步获取数据
         const { dayPictureUrl, weather } = await reqWeather('大连')
-        console.log('大连天气: ', weather)
         // 更新状态
         this.setState({ dayPictureUrl, weather })
     }
